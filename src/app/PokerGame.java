@@ -7,13 +7,15 @@ import model.PokerGameModel;
 import view.PokerGameView;
 
 public class PokerGame extends Application {
-	public static final int NUM_PLAYERS = 2;
+	public static int numPlayers = 2;
+	public static final int MAX_PLAYERS = 10;
 	PokerGameModel model;
 	PokerGameView view;
 	PokerGameController controller;
+
 	
     public static void main(String[] args) {
-        launch();
+    	        launch();
     }
 
     @Override
@@ -23,4 +25,13 @@ public class PokerGame extends Application {
     	view = new PokerGameView(primaryStage, model);
     	controller = new PokerGameController(model, view);
     }
+
+    public static void setNumPlayers(int newAmountOfPlayers){
+    	if(newAmountOfPlayers >= 2 && newAmountOfPlayers <= MAX_PLAYERS)
+    	numPlayers = newAmountOfPlayers;
+		else
+			numPlayers = 2;
+
+	}
+
 }

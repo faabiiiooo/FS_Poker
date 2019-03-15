@@ -52,6 +52,14 @@ public class HandTypeTest {
 			{"2D","2H","2S","4C","4H"}
 	};
 
+	private static String[][] fourOfAKind = {
+			{"2D","2H","2S","2C","5H"}
+	};
+
+	private static String[][] straightFlush = {
+			{"9H", "JH", "KH", "QH", "AH"}
+	};
+
 	// This is where we store the translated hands
 	ArrayList<ArrayList<Card>> highCardHands;
 	ArrayList<ArrayList<Card>> pairHands;
@@ -60,6 +68,8 @@ public class HandTypeTest {
 	ArrayList<ArrayList<Card>> straightHands;
 	ArrayList<ArrayList<Card>> flushHands;
 	ArrayList<ArrayList<Card>> fullHouseHands;
+	ArrayList<ArrayList<Card>> fourOfAKindHands;
+	ArrayList<ArrayList<Card>> straightFlushHands;
 	
 	/**
 	 * The makeHands method is called before each test method,
@@ -75,6 +85,8 @@ public class HandTypeTest {
 		straightHands = makeHands(straight);
 		flushHands = makeHands(flush);
 		fullHouseHands = makeHands(fullHouse);
+		fourOfAKindHands = makeHands(fourOfAKind);
+		straightFlushHands = makeHands(straightFlush);
 	}
 
 	/**
@@ -136,6 +148,20 @@ public class HandTypeTest {
 	public void testIsFullHouse(){
 		for(ArrayList<Card> hand : fullHouseHands){
 			assertTrue(HandType.isFullHouse(hand));
+		}
+	}
+
+	@Test
+	public void testIsFourOfAKind(){
+		for(ArrayList<Card> hand : fourOfAKindHands){
+			assertTrue(HandType.isFourOfAKind(hand));
+		}
+	}
+
+	@Test
+	public void testIsStraightFlush(){
+		for(ArrayList<Card> hand : straightFlushHands){
+			assertTrue(HandType.isStraightFlush(hand));
 		}
 	}
 

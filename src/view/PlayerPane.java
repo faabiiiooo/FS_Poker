@@ -2,7 +2,6 @@ package view;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import model.Card;
 import model.HandType;
@@ -19,6 +18,9 @@ public class PlayerPane extends VBox {
     public PlayerPane() {
         super(); // Always call super-constructor first !!
         this.getStyleClass().add("player"); // CSS style class
+        lblName.getStyleClass().add("lbl-player");
+        lblEvaluation.getStyleClass().add("lbl-evaluation");
+        hboxCards.getStyleClass().add("hbox-cards");
         
         // Add child nodes
         this.getChildren().addAll(lblName, hboxCards, lblEvaluation);
@@ -48,5 +50,10 @@ public class PlayerPane extends VBox {
     		else
     			lblEvaluation.setText("--");
     	}
+    }
+
+    public void showWinEvaluation(String textToAppend){
+        //Appending win / loose/ draw to lblEvaluation
+        lblEvaluation.setText(lblEvaluation.getText()+" | "+textToAppend);
     }
 }

@@ -3,9 +3,10 @@ package model;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public enum HandType {
+public enum HandType implements Comparable<HandType>{
     HighCard, OnePair, TwoPair, ThreeOfAKind, Straight, Flush, FullHouse, FourOfAKind, StraightFlush;
-    
+
+
     /**
      * Determine the value of this hand. Note that this does not
      * account for any tie-breaking
@@ -177,12 +178,26 @@ public enum HandType {
     }
     
     public static boolean isFourOfAKind(ArrayList<Card> cards) {
-        // TODO        
-        return false;
+        boolean fourOfAKindFound = false;
+        int countIdenticalRanks = 0;
+        //same concept like in isThreeOfAKind
+        for(int i = 0; i < cards.size()-1;i++){
+            for(int j = i+1; j < cards.size(); j++){
+                if(cards.get(i).getRank() == cards.get(j).getRank() && countIdenticalRanks < 4){
+                    countIdenticalRanks++;
+                }
+            }
+        }
+        if(countIdenticalRanks == 4){
+            fourOfAKindFound = true;
+        }
+
+
+        return fourOfAKindFound;
     }
     
     public static boolean isStraightFlush(ArrayList<Card> cards) {
-        // TODO        
-        return false;
+        //StraightFlush is combination out of flush and straight, so let those both method check that
+        return isFlush(cards) && isStraight(cards);
     }
 }
