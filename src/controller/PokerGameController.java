@@ -5,13 +5,13 @@ import javafx.event.Event;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
-import model.Card;
-import model.DeckOfCards;
-import model.Player;
-import model.PokerGameModel;
+import model.*;
 import view.ChangeNumPlayersView;
 import view.PlayerPane;
 import view.PokerGameView;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class PokerGameController {
 	private PokerGameModel model;
@@ -34,7 +34,7 @@ public class PokerGameController {
 
 	private void openNumPlayersWindow(Event e){  //open window to enter new amount of players
 		numPlayersView = new ChangeNumPlayersView();
-		numPlayersView.getApply().setOnAction(this::changeNumPlayers);
+		numPlayersView.getApply().setOnAction(this::changeNumPlayers);  //setting apply Button on action
 
 	}
 
@@ -45,13 +45,52 @@ public class PokerGameController {
 			int numPlayers = Integer.parseInt(numOfPlayers);
 			PokerGame.setNumPlayers(numPlayers);
 		} catch (NumberFormatException ex){
-			System.out.println("Keine ganze Zahl eingegeben!");
+			System.out.println("invalid number");
 		}
 		model = new PokerGameModel();  //generating new Model and view to start a new game with new amount of players
 		view = new PokerGameView(new Stage(), model);
 		this.setViewsOnAction();
 		view.start();
 		numPlayersView.stop();  //close the window in which num of players got entered
+
+	}
+
+	private void evaluateWinner(){
+		ArrayList<Player> players = new ArrayList<>();
+		ArrayList<Player> winners = new ArrayList<>();
+		for (int i = 0; i < PokerGame.numPlayers; i++){  //getting all the players to manipulate them.
+			players.add(model.getPlayer(i));
+		}
+
+		Collections.sort(players);  //sort players by their handtype
+		Player winner = players.get(players.size()-1); //make the player with the highest hand defaultly to a winner
+		winners.add(winner);
+		players.remove(winner);  //remove player with highest hand from list.
+		for(Player p : new ArrayList<Player>(players)){
+			if(p.compareTo(winner) == 0){  //check if there are other players in the list with the same hand
+				winners.add(p);  //if yes add them to the list of winners and remove them from regular players.
+				players.remove(p);
+			} else {
+				p.setWinEval("lost");  //for every player wihch has not the best hand in list set winEval to lost.
+			}
+		}
+
+		//System.out.println("winners.size: "+winners.size());
+		/*for(Player p: winners){
+			System.out.println(p.getHandType());
+		}*/
+		if(winners.size() == 1){ //if there is only one winner, everything is ok, set winEval to won
+			winners.get(0).setWinEval("won");
+		} else {
+			winner = HandType.handleTieBreak(winners); //if there are more than one winner start tieBreak
+			if(winner != null){
+				winner.setWinEval("won");
+			}/*
+			for(Player p: winners){
+				System.out.println(p.getWinEval());
+			}*/
+			//HandType.handleTieBreak(winners);
+		}
 
 	}
 
@@ -87,25 +126,33 @@ public class PokerGameController {
         		PlayerPane pp = view.getPlayerPane(i);
         		pp.updatePlayerDisplay();
         	}
-        	model.evaluateWinner(); //Settin winEval Variable in Player, based on compareTo on HandType
-        	for(int i = 0; i < PokerGame.numPlayers -1; i++) {  //Appending win / loose / draw to EvaluationLabel
+        	this.evaluateWinner(); //Setting winEval Variable in Player, based on compareTo on HandType
+			for(int i = 0; i < PokerGame.numPlayers; i++) {
+				view.getPlayerPane(i).showWinEvaluation(model.getPlayer(i).getWinEval());
+			}
+        	/*for(int i = 0; i < PokerGame.numPlayers -1; i++) {  //Appending win / loose / draw to EvaluationLabel
 				for (int j = i+1; j < PokerGame.numPlayers; j++) {
-					if (model.getPlayer(i).getWinEval().equals("win") && model.getPlayer(j).getWinEval().equals("win")) {
-						view.getPlayerPane(i).showWinEvaluation("draw");
-						view.getPlayerPane(j).showWinEvaluation("draw");
+
+					if (model.getPlayer(i).getWinEval().equals("won") && model.getPlayer(j).getWinEval().equals("won")) {
+						view.getPlayerPane(i).showWinEvaluation("draw"+i);
+						view.getPlayerPane(j).showWinEvaluation("draw"+j);
+						System.out.println("1st if");
 					} else {
-						if (model.getPlayer(i).getWinEval().equals("win") && model.getPlayer(j).getWinEval().equals("loose")) {
+						if (model.getPlayer(i).getWinEval().equals("won") && model.getPlayer(j).getWinEval().equals("lost")) {
 							view.getPlayerPane(i).showWinEvaluation("win");
 							view.getPlayerPane(j).showWinEvaluation("loose");
+							System.out.println("2nd if");
 						} else {
-							if (model.getPlayer(i).getWinEval().equals("loose") && model.getPlayer(j).getWinEval().equals("win")) {
+							if (model.getPlayer(i).getWinEval().equals("lost") && model.getPlayer(j).getWinEval().equals("won")) {
 								view.getPlayerPane(i).showWinEvaluation("loose");
 								view.getPlayerPane(j).showWinEvaluation("win");
+								System.out.println("3th if");
 							}
 						}
 					}
+
 				}
-			}
+			} */
     	} else {
             Alert alert = new Alert(AlertType.ERROR, "Not enough cards - shuffle first");
             alert.showAndWait();

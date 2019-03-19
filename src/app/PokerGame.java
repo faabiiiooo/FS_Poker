@@ -8,7 +8,7 @@ import view.PokerGameView;
 
 public class PokerGame extends Application {
 	public static int numPlayers = 2;
-	public static final int MAX_PLAYERS = 10;
+	public static final int MAX_PLAYERS = 4;
 	PokerGameModel model;
 	PokerGameView view;
 	PokerGameController controller;

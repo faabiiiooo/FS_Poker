@@ -8,7 +8,7 @@ public class Player implements Comparable<Player> {
     private final String playerName; // This is the ID
     private final ArrayList<Card> cards = new ArrayList<>();
     private HandType handType;
-    private String winEval;
+    private String winEval = "notEvaluated";
 
     
     public Player(String playerName) {
@@ -58,6 +58,10 @@ public class Player implements Comparable<Player> {
     @Override
     public int compareTo(Player o) {
         return handType.compareTo(o.handType);
+    }
+
+    public HandType getHandType(){
+        return this.handType;
     }
 
 }

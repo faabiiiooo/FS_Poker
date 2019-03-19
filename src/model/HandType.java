@@ -25,7 +25,7 @@ public enum HandType implements Comparable<HandType>{
         
         return currentEval;
     }
-    
+
     public static boolean isOnePair(ArrayList<Card> cards) {
         boolean found = false;
         for (int i = 0; i < cards.size() - 1 && !found; i++) {
@@ -34,6 +34,37 @@ public enum HandType implements Comparable<HandType>{
             }
         }
         return found;
+    }
+
+    public static Player handleTieBreak(ArrayList<Player> winners){
+        Player winner = null;
+        switch (winners.get(0).getHandType()){
+
+            case HighCard:
+                winner = handleHighCardTieBreak(winners);
+
+
+        }
+    return winner;
+    }
+
+    private static Player handleHighCardTieBreak(ArrayList<Player> winners){
+        Player winner = null;
+        Collections.sort(winners.get(0).getCards());
+        for (int i = 0; i < winners.size() -1; i++){
+            for(int j = i+1; j < winners.size(); j++){
+                if (winners.get(i).getCards().get(i).getRank().compareTo(winners.get(j).getCards().get(i).getRank()) < 0){
+                    winner = winners.get(j);
+                } else {
+                    if (winners.get(i).getCards().get(i).getRank().compareTo(winners.get(j).getCards().get(j).getRank()) > 0){
+                        winner = winners.get(i);
+                    } else {
+                        winner = null;
+                    }
+                }
+            }
+        }
+        return winner;
     }
     
     public static boolean isTwoPair(ArrayList<Card> cards) {

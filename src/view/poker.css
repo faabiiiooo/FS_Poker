@@ -1,3 +1,14 @@
+.numPlayer-view{
+    -fx-background-image: url(/images/background_controls.jpg);
+    -fx-background-size:cover;
+    -fx-hgap: 100;
+}
+
+.numPlayer-view .label{
+    -fx-text-fill: white;
+    -fx-font-size: 12pt;
+}
+
 .label {
 	-fx-padding: 5.0px;
     -fx-min-width: 200.0;
@@ -22,14 +33,14 @@
     -fx-background-image: url(/images/background_controls.jpg);
 
 }
-
+/*
 #menu-edit:showing .label{
     -fx-opacity: 1.0;
     -fx-text-fill: white;
     -fx-border-width: 0;
     -fx-background-image: url(/images/background_controls.jpg);
 }
-
+*/
 #controlArea {
     -fx-spacing: 15.0px;
     -fx-padding: 5.0px;
@@ -39,11 +50,27 @@
     -fx-background-size:cover;
 
 }
-#all-players{
-    -fx-background-image: url(/images/background_cards.jpg);
+/* no hover in menu*/
+#menu-edit:hover,
+#menu-edit:showing,
+#menu-edit .menu-item:focused {
+    -fx-background-color: lightblue;
+    -fx-background-size: cover;
+
+}
+.context-menu {
+    -fx-spacing: 15.0px;
+    -fx-padding: 5.0px;
+    -fx-border-color: black;
+    -fx-border-width: 2.0px;
+    -fx-background-image: url(/images/background_controls.jpg);
     -fx-background-size:cover;
 }
 
+#all-players {
+    -fx-background-image: url(/images/background_cards.jpg);
+    -fx-background-size: cover;
+}
 .player {
 	-fx-padding: 75;
     -fx-border-color: green;

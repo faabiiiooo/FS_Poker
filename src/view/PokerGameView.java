@@ -1,16 +1,17 @@
 package view;
 
 import app.PokerGame;
+import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.TilePane;
 import javafx.stage.Stage;
 import model.PokerGameModel;
 
 public class PokerGameView {
-	private HBox players;
+	private TilePane players;
 	private ControlArea controls;
 	private MainMenu menu;
 	
@@ -26,7 +27,7 @@ public class PokerGameView {
 		System.out.println(PokerGame.numPlayers);
 		
 		// Create all of the player panes we need, and put them into an HBox
-		players = new HBox();
+		players = new TilePane(Orientation.HORIZONTAL);
 		for (int i = 0; i < PokerGame.numPlayers; i++) {
 			PlayerPane pp = new PlayerPane();
 			pp.setPlayer(model.getPlayer(i)); // link to player object in the logic
@@ -34,6 +35,7 @@ public class PokerGameView {
 		}
 
 		players.setId("all-players");
+		players.setPrefColumns(2);
 
 		//Create main menu
 		menu = new MainMenu();
@@ -57,6 +59,7 @@ public class PokerGameView {
                 getClass().getResource("poker.css").toExternalForm());
         this.stage.setTitle("Poker Miniproject");
         this.stage.setScene(scene);
+        //this.stage.setMaximized(true);
         this.start();
 	}
 
