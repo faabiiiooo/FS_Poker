@@ -26,6 +26,398 @@ public enum HandType implements Comparable<HandType>{
         return currentEval;
     }
 
+    public static Player handleTieBreak(ArrayList<Player> winners){
+        Player winner = null;
+        switch (winners.get(0).getHandType()){
+
+            case HighCard:
+                winner = handleHighCardTieBreak(winners);
+                break;
+
+            case OnePair:
+                winner = handleOnePairTieBreak(winners);
+                break;
+            case TwoPair:
+                winner = handleTwoPairTieBreak(winners);
+                break;
+            case ThreeOfAKind:
+                winner = handleThreeOfAKindTieBreak(winners);
+                break;
+            case Straight:
+                winner = handleStraightTieBreak(winners);
+                break;
+            case Flush:
+                winner = handleFlushTieBreak(winners);
+                break;
+            case FullHouse:
+                winner = handleFullHouseTieBreak(winners);
+                break;
+            case FourOfAKind:
+                winner = handleFourOfAKindTieBreak(winners);
+                break;
+            case StraightFlush:
+                winner = handleStraightFlushTieBreak(winners);
+                break;
+
+        }
+    return winner;
+    }
+
+    private static ArrayList<Player> sortPlayerTieBreakCards(ArrayList<Player> winners){
+        for (int i = 0; i < winners.size(); i++) {
+            Collections.sort(winners.get(i).getCards());  //sorting hands of players by their ordinal
+        }
+        return winners;
+    }
+
+    private static Player handleHighCardTieBreak(ArrayList<Player> winners) {
+        Player winner = null;
+
+
+       winners = sortPlayerTieBreakCards(winners);
+
+        for (int i = 0; i < winners.size() - 1; i++) {
+            for (int j = i + 1; j < winners.size(); j++) {
+                if (winners.get(i).getCards().get(Player.HAND_SIZE - 1).compareTo(
+                        winners.get(j).getCards().get(Player.HAND_SIZE - 1)) < 0) {
+                    winner = winners.get(j);  //returning player with higher ordinal on last place in arraylist
+                    winners.get(i).setWinEval("lost"); //setting winEval to lost for every other player
+                } else {
+                    if (winners.get(i).getCards().get(Player.HAND_SIZE - 1).compareTo(
+                            winners.get(j).getCards().get(Player.HAND_SIZE - 1)) > 0) {
+                        winner = winners.get(i);
+                        winners.get(j).setWinEval("lost");
+                    } else {
+                        if (winners.get(i).getCards().get(Player.HAND_SIZE - 1).compareTo(
+                                winners.get(j).getCards().get(Player.HAND_SIZE - 1)) == 0) {
+
+                            if (winners.get(i).getCards().get(Player.HAND_SIZE - 2).compareTo(
+                                    winners.get(j).getCards().get(Player.HAND_SIZE - 2)) < 0) {
+                                winner = winners.get(j);  //returning player with higher ordinal on 2ndlast place in arraylist
+                                winners.get(i).setWinEval("lost");
+                            } else {
+                                if (winners.get(i).getCards().get(Player.HAND_SIZE - 2).compareTo(
+                                        winners.get(j).getCards().get(Player.HAND_SIZE - 2)) > 0) {
+                                    winner = winners.get(i);
+                                    winners.get(j).setWinEval("lost");
+                                    //to extend to make a full tiebreak available
+                                } else {
+                                    if (winners.get(i).getCards().get(Player.HAND_SIZE - 2).compareTo(
+                                            winners.get(j).getCards().get(Player.HAND_SIZE - 2)) == 0) {
+
+                                        if (winners.get(i).getCards().get(Player.HAND_SIZE - 3).compareTo(
+                                                winners.get(j).getCards().get(Player.HAND_SIZE - 3)) < 0) {
+                                            winner = winners.get(j);  //returning player with higher ordinal on 3dlast place in arraylist
+                                            winners.get(i).setWinEval("lost");
+                                        } else {
+                                            if (winners.get(i).getCards().get(Player.HAND_SIZE - 3).compareTo(
+                                                    winners.get(j).getCards().get(Player.HAND_SIZE - 3)) > 0) {
+                                                winner = winners.get(i);
+                                                winners.get(j).setWinEval("lost");
+                                                //to extend to make a full tiebreak available
+
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return winner;
+    }
+
+    private static Player handleOnePairTieBreak(ArrayList<Player> winners){
+        Player winner = null;
+        int winnerIndex = -1;
+        boolean foundWinner = false;
+
+        //creating a 2d arraylist. 1st dimension = player, 2nd dimension = cards of onePair
+        ArrayList<ArrayList<Card>> onePairCards = getPairCards(winners, 2);
+
+
+        for(int i = 0; i < onePairCards.size() -1 && !foundWinner; i++){  //iterating through players
+            for(int j = i+1; j < onePairCards.size() && !foundWinner; j++){
+               if(onePairCards.get(i).get(onePairCards.get(i).size()-1).compareTo(
+                       onePairCards.get(j).get(onePairCards.get(j).size()-1)) < 0){  //comparing cards of both players
+                        winnerIndex = j;
+                        foundWinner = true;
+                    } else {
+                        if(onePairCards.get(i).get(onePairCards.get(i).size()-1).compareTo(
+                                onePairCards.get(j).get(onePairCards.get(j).size()-1)) > 0) {
+                            winnerIndex = i;
+                            foundWinner = true;
+                        }
+
+                    }
+                }
+
+        }
+        System.out.println("WinnerIndex: "+winnerIndex);
+        if(winnerIndex != -1){
+            winner = winners.get(winnerIndex);  //getting Winner based on index in outter Arraylist of onePairCards.
+            for(Player p : winners){
+                p.setWinEval("lost");
+            }
+        }
+
+        return winner;
+    }
+
+    private static Player handleTwoPairTieBreak(ArrayList<Player>winners){
+        Player winner = null;
+        int winnerIndex = -1;
+        boolean foundWinner = false;
+        ArrayList<Player> clonedWinners = (ArrayList<Player>) winners.clone();
+
+        ArrayList<ArrayList<Card>> twoPairCards = getPairCards(clonedWinners,4);
+
+        /*
+        for(int i = 0; i < twoPairCards.size(); i++){
+            Collections.sort(twoPairCards.get(i));
+
+        }*/
+
+       // System.out.println("getPairCards: "+twoPairCards.size());
+
+
+        /*
+        for(int i = 0; i < twoPairCards.size(); i++){
+            for (int j = 0; j < twoPairCards.get(i).size(); j++){
+                System.out.println("Player:"+i+twoPairCards.get(i).get(j));
+            }
+        }*/
+
+        for(int i =0; i < twoPairCards.size()-1 && !foundWinner; i++){
+            for(int j = i+1; j < twoPairCards.size() &&!foundWinner; j++){
+                if(twoPairCards.get(i).get(twoPairCards.get(i).size()-1).compareTo(
+                        twoPairCards.get(j).get(twoPairCards.get(j).size()-1)) < 0){
+                    winnerIndex = j;
+                    foundWinner = true;
+                } else {
+                    if(twoPairCards.get(i).get(twoPairCards.get(i).size()-1).compareTo(
+                            twoPairCards.get(j).get(twoPairCards.get(j).size()-1)) > 0){
+                        winnerIndex = i;
+                        foundWinner = true;
+                    } else {
+                        if (twoPairCards.get(i).get(twoPairCards.get(i).size() - 1).compareTo(
+                                twoPairCards.get(j).get(twoPairCards.get(j).size() - 1))==0){
+
+                            if(twoPairCards.get(i).get(twoPairCards.get(i).size()-3).compareTo(
+                                    twoPairCards.get(j).get(twoPairCards.get(j).size()-3)) < 0){
+                                winnerIndex = j;
+                                foundWinner = true;
+                            } else {
+                                if(twoPairCards.get(i).get(twoPairCards.get(i).size()-3).compareTo(
+                                        twoPairCards.get(j).get(twoPairCards.get(j).size()-3)) > 0){
+                                    winnerIndex = i;
+                                    foundWinner = true;
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+            }
+        }
+
+        winner = clonedWinners.get(winnerIndex);
+        winner.setWinEval("won");
+        for(Player p : clonedWinners){
+            p.setWinEval("lost");
+        }
+
+
+        return winner;
+    }
+
+    private static Player handleThreeOfAKindTieBreak(ArrayList<Player> winners){
+        Player winner = null;
+        int winnerIndex = -1;
+        boolean foundWinner = false;
+
+        ArrayList<Player> clonedWinners = (ArrayList<Player>) winners.clone();
+
+        ArrayList<ArrayList<Card>> threeOfAKindCards = getPairCards(clonedWinners, 6);
+
+        System.out.println(threeOfAKindCards.size());
+
+        for (int i = 0; i < threeOfAKindCards.size()-1 && !foundWinner; i++){
+            for(int j = i+1; j < threeOfAKindCards.size() && !foundWinner; j++){
+                if(threeOfAKindCards.get(i).get(threeOfAKindCards.get(i).size()-1).compareTo(
+                        threeOfAKindCards.get(j).get(threeOfAKindCards.get(j).size()-1)) < 0){
+                    winnerIndex = j;
+                    foundWinner = true;
+                } else {
+                    if(threeOfAKindCards.get(i).get(threeOfAKindCards.get(i).size()-1).compareTo(
+                            threeOfAKindCards.get(j).get(threeOfAKindCards.get(j).size()-1)) > 0){
+                        winnerIndex = i;
+                        foundWinner = true;
+                    }
+                }
+            }
+
+        }
+
+        if(winnerIndex != -1){
+
+            winner = clonedWinners.get(winnerIndex);
+            for(Player p : clonedWinners){
+                p.setWinEval("lost");
+            }
+
+        }
+
+
+
+
+        return winner;
+    }
+
+    private static Player handleStraightTieBreak(ArrayList<Player> winners){
+        Player winner = null;
+        int winnerIndex = -1;
+        boolean winnerFound = false;
+
+        ArrayList<Player> clonedWinners = (ArrayList<Player>) winners.clone();
+        ArrayList<Integer> results = new ArrayList<>();
+
+        for(int i = 0; i < clonedWinners.size(); i++){
+            Collections.sort(clonedWinners.get(i).getCards());
+        }
+
+        for(int i = 0; i < clonedWinners.size();i++){  //putting values of two higest cards in arraylist
+            int result = 0;
+            for(int j = 3; j < Player.HAND_SIZE; j++){
+                result += clonedWinners.get(i).getCards().get(j).getRank().ordinal();
+            }
+            results.add(result);
+
+        }
+
+        for(int i = 0; i < results.size()-1; i++){
+            for(int j = i+1; j < results.size(); j++){
+                if(results.get(i) < results.get(j)){
+                    winnerIndex = j;
+                } else {  //the higehr value must be the higher straight.
+                    if(results.get(i) > results.get(j)){
+                        winnerIndex = i;
+                    }
+                }
+            }
+
+        }
+
+        winner = clonedWinners.get(winnerIndex);
+        for(Player p : clonedWinners){
+            p.setWinEval("lost");
+        }
+
+        return winner;
+    }
+
+    private static Player handleFlushTieBreak(ArrayList<Player> winners){
+        Player winner = null;
+
+        ArrayList<Player> clonedWinners = (ArrayList<Player>) winners.clone();
+
+        winner = handleHighCardTieBreak(clonedWinners);  //highest card wins.
+
+        return winner;
+    }
+
+    private static Player handleFullHouseTieBreak(ArrayList<Player> winners){
+        Player winner = null;
+
+        ArrayList<Player> clonedWinners = (ArrayList<Player>) winners;
+
+        if(handleThreeOfAKindTieBreak(clonedWinners) != null){
+            winner = handleThreeOfAKindTieBreak(clonedWinners);
+        }
+
+        return winner;
+    }
+
+    private static Player handleFourOfAKindTieBreak(ArrayList<Player> winners){
+        Player winner = null;
+        int winnerIndex = -1;
+        boolean winnerFound = false;
+
+        ArrayList<Player> clonedWinners = (ArrayList<Player>) winners.clone();
+        ArrayList<ArrayList<Card>> fourOfAKindCards = getPairCards(clonedWinners, 8);
+
+        System.out.println("sizeCardsArray: "+fourOfAKindCards.size());
+
+        for(int i = 0; i < fourOfAKindCards.size()-1 && !winnerFound; i++){
+            for(int j = i+1; j < fourOfAKindCards.size() && !winnerFound; j++){
+                if(fourOfAKindCards.get(i).get(fourOfAKindCards.get(i).size()-1).compareTo(
+                        fourOfAKindCards.get(j).get(fourOfAKindCards.get(j).size()-1)) < 0){
+                    winnerIndex = j;
+                    winnerFound = true;
+                } else {
+                    if(fourOfAKindCards.get(i).get(fourOfAKindCards.get(i).size()-1).compareTo(
+                            fourOfAKindCards.get(j).get(fourOfAKindCards.get(j).size()-1)) > 0){
+                        winnerIndex = i;
+                        winnerFound = true;
+                    }
+                }
+            }
+        }
+
+        if(winnerIndex != -1){
+            winner = clonedWinners.get(winnerIndex);
+            for(Player p : clonedWinners){
+                p.setWinEval("lost");
+            }
+        }
+
+        return winner;
+    }
+
+    private static Player handleStraightFlushTieBreak(ArrayList<Player> winners){
+        Player winner = null;
+
+        ArrayList<Player> clonedWinners = (ArrayList<Player>) winners.clone();
+
+        winner = handleStraightTieBreak(clonedWinners);
+
+        return winner;
+    }
+
+    private static ArrayList<ArrayList<Card>> getPairCards(ArrayList<Player> winners, int numOfSearchedCards){
+        ArrayList<ArrayList<Card>> pairCards = new ArrayList<>();
+
+        for(int i = 0; i < winners.size(); i++){
+            Collections.sort(winners.get(i).getCards());
+        }
+
+
+        for(int i = 0; i < winners.size(); i++){
+            ArrayList<Card> playerPairCards = new ArrayList<>();
+            for(int j = 0; j < winners.get(i).getCards().size()-1;j++){
+                for(int n = j+1; n < winners.get(i).getCards().size(); n++){
+                    if(winners.get(i).getCards().get(j).getRank() == winners.get(i).getCards().get(n).getRank()){
+                        playerPairCards.add(winners.get(i).getCards().get(n));
+                        playerPairCards.add(winners.get(i).getCards().get(j));
+                        System.out.println(winners.get(i).getCards().get(n));
+                        System.out.println("p"+i+"PairCards:"+playerPairCards.size());
+                        if(playerPairCards.size() == numOfSearchedCards){
+                            pairCards.add(playerPairCards);
+                        }
+                    }
+                }
+            }
+        }
+
+        return pairCards;
+
+    }
+
+
     public static boolean isOnePair(ArrayList<Card> cards) {
         boolean found = false;
         for (int i = 0; i < cards.size() - 1 && !found; i++) {
@@ -34,37 +426,6 @@ public enum HandType implements Comparable<HandType>{
             }
         }
         return found;
-    }
-
-    public static Player handleTieBreak(ArrayList<Player> winners){
-        Player winner = null;
-        switch (winners.get(0).getHandType()){
-
-            case HighCard:
-                winner = handleHighCardTieBreak(winners);
-
-
-        }
-    return winner;
-    }
-
-    private static Player handleHighCardTieBreak(ArrayList<Player> winners){
-        Player winner = null;
-        Collections.sort(winners.get(0).getCards());
-        for (int i = 0; i < winners.size() -1; i++){
-            for(int j = i+1; j < winners.size(); j++){
-                if (winners.get(i).getCards().get(i).getRank().compareTo(winners.get(j).getCards().get(i).getRank()) < 0){
-                    winner = winners.get(j);
-                } else {
-                    if (winners.get(i).getCards().get(i).getRank().compareTo(winners.get(j).getCards().get(j).getRank()) > 0){
-                        winner = winners.get(i);
-                    } else {
-                        winner = null;
-                    }
-                }
-            }
-        }
-        return winner;
     }
     
     public static boolean isTwoPair(ArrayList<Card> cards) {
@@ -91,6 +452,21 @@ public enum HandType implements Comparable<HandType>{
         boolean threeOfAKindFound = false;
         int countIdenticalCards = 0;
 
+        ArrayList<Card> clonedCards = (ArrayList<Card>) cards.clone();
+        Collections.sort(clonedCards);
+
+        for(int i = 0; i < clonedCards.size()-2 && !threeOfAKindFound;i++){
+            for(int j = i+1; j < clonedCards.size()-1 && !threeOfAKindFound; j++){
+                for(int n = j + 1; n < clonedCards.size() && !threeOfAKindFound; n++){
+                    if(clonedCards.get(i).getRank() == clonedCards.get(j).getRank() && clonedCards.get(j).getRank()
+                            == clonedCards.get(n).getRank()){
+                        threeOfAKindFound = true;
+                    }
+                }
+            }
+        }
+
+        /*
         for(int i = 0; i < cards.size() - 1; i++){
             for(int j = i+1; j < cards.size();j++ ){
                 if(cards.get(i).getRank()== cards.get(j).getRank() && countIdenticalCards < 3){
@@ -101,7 +477,7 @@ public enum HandType implements Comparable<HandType>{
         if(countIdenticalCards == 3) {
             threeOfAKindFound = true;
         }
-
+        */
         return threeOfAKindFound;
     }
     
@@ -184,24 +560,48 @@ public enum HandType implements Comparable<HandType>{
     public static boolean isFullHouse(ArrayList<Card> cards) {
         boolean firstThreeFound = false;
         ArrayList<Card> clonedCards = (ArrayList<Card>) cards.clone(); //Cloning cards to alter array
+        Collections.sort(clonedCards);
         int countIdenticalCards = 0;
         ArrayList<Card> itemsToDelete = new ArrayList<Card>();  //Bin
 
-        for(int i = 0; i < clonedCards.size() - 1 && countIdenticalCards < 3; i++){
-            for(int j = i+1; j < clonedCards.size() && countIdenticalCards < 3;j++ ){
-                if(clonedCards.get(i).getRank()== clonedCards.get(j).getRank() && countIdenticalCards < 3){
+        for(int i = 0; i < clonedCards.size()-2 && !firstThreeFound;i++){
+            for(int j = i+1; j < clonedCards.size()-1 && !firstThreeFound; j++){
+                for(int n = j + 1; n < clonedCards.size() && !firstThreeFound; n++){
+                    if(clonedCards.get(i).getRank() == clonedCards.get(j).getRank() && clonedCards.get(j).getRank()
+                    == clonedCards.get(n).getRank()){
+                        firstThreeFound = true;
+                        clonedCards.remove(n);
+                        clonedCards.remove(j);
+                        clonedCards.remove(i);
+                    }
+                }
+            }
+        }
+
+
+
+
+        /*
+        for(int i = 0; i < clonedCards.size() - 1; i++){
+            for(int j = i+1; j < clonedCards.size();j++ ){
+                if(clonedCards.get(i).getRank()== clonedCards.get(j).getRank() && countIdenticalCards != 3){
                     countIdenticalCards++;
-                    itemsToDelete.add(clonedCards.get(i));  //adding cards wich are part of the ThreePair to bin
-                    itemsToDelete.add(clonedCards.get(j));
+                    System.out.println("count "+countIdenticalCards);
+                    System.out.println("card i"+clonedCards.get(i));
+                    System.out.println("card j"+clonedCards.get(j));
+                   clonedCards.remove(j);
+                   //clonedCards.remove(i);
                 }
             }
         }
         if(countIdenticalCards == 3) {
-            for(Card c : itemsToDelete){
-                clonedCards.remove(c);  //removing Cards from  cloned arraylist
-            }
+
             firstThreeFound = true;
-        }
+        }*/
+
+        /*for(Card c : clonedCards){
+            System.out.println(c);
+        }*/
 
             //check if in remaining cards is a one pair, what would be neccesairy for a full house.
             return firstThreeFound && isOnePair(clonedCards);
@@ -211,8 +611,45 @@ public enum HandType implements Comparable<HandType>{
     public static boolean isFourOfAKind(ArrayList<Card> cards) {
         boolean fourOfAKindFound = false;
         int countIdenticalRanks = 0;
+
+        ArrayList<Card> clonedCards = (ArrayList<Card>) cards.clone();
+
+        Collections.sort(clonedCards);
+
+        if(clonedCards.get(0).getRank() == clonedCards.get(1).getRank()&&
+        clonedCards.get(1).getRank() == clonedCards.get(2).getRank()&&
+        clonedCards.get(2).getRank() == clonedCards.get(3).getRank()){
+            fourOfAKindFound = true;
+        } else {
+            if(clonedCards.get(1).getRank() == clonedCards.get(2).getRank()&&
+                    clonedCards.get(2).getRank() == clonedCards.get(3).getRank()&&
+                    clonedCards.get(3).getRank() == clonedCards.get(4).getRank()){
+                fourOfAKindFound = true;
+            }
+        }
+/*
+        for(int i = 0; i < Player.HAND_SIZE-2; i++){
+            for(int j = i+1; j < Player.HAND_SIZE-1; j++){
+                if(clonedCards.get(i).getRank().compareTo(clonedCards.get(j).getRank()) == 0 && countIdenticalRanks != 4){
+                    countIdenticalRanks++;
+                }
+            }
+        }*/
+
+/*
+        if(clonedCards.get(clonedCards.size()-1).getRank() == clonedCards.get(clonedCards.size()-2).getRank()&&
+        clonedCards.get(clonedCards.size()-3).getRank() == clonedCards.get(clonedCards.size()-4).getRank()&&){
+            fourOfAKindFound = true;
+        } else {
+            if(clonedCards.get(clonedCards.size()-5).getRank() == clonedCards.get(clonedCards.size()-4).getRank()&&
+                    clonedCards.get(clonedCards.size()-3).getRank() == clonedCards.get(clonedCards.size()-2).getRank()){
+                fourOfAKindFound = true;
+            }
+        }
+*/
+
         //same concept like in isThreeOfAKind
-        for(int i = 0; i < cards.size()-1;i++){
+       /* for(int i = 0; i < cards.size()-1;i++){
             for(int j = i+1; j < cards.size(); j++){
                 if(cards.get(i).getRank() == cards.get(j).getRank() && countIdenticalRanks < 4){
                     countIdenticalRanks++;
@@ -222,7 +659,7 @@ public enum HandType implements Comparable<HandType>{
         if(countIdenticalRanks == 4){
             fourOfAKindFound = true;
         }
-
+        */
 
         return fourOfAKindFound;
     }

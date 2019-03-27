@@ -85,7 +85,9 @@ public class PokerGameController {
 			winner = HandType.handleTieBreak(winners); //if there are more than one winner start tieBreak
 			if(winner != null){
 				winner.setWinEval("won");
-			}/*
+			}
+
+			/*
 			for(Player p: winners){
 				System.out.println(p.getWinEval());
 			}*/
@@ -130,29 +132,6 @@ public class PokerGameController {
 			for(int i = 0; i < PokerGame.numPlayers; i++) {
 				view.getPlayerPane(i).showWinEvaluation(model.getPlayer(i).getWinEval());
 			}
-        	/*for(int i = 0; i < PokerGame.numPlayers -1; i++) {  //Appending win / loose / draw to EvaluationLabel
-				for (int j = i+1; j < PokerGame.numPlayers; j++) {
-
-					if (model.getPlayer(i).getWinEval().equals("won") && model.getPlayer(j).getWinEval().equals("won")) {
-						view.getPlayerPane(i).showWinEvaluation("draw"+i);
-						view.getPlayerPane(j).showWinEvaluation("draw"+j);
-						System.out.println("1st if");
-					} else {
-						if (model.getPlayer(i).getWinEval().equals("won") && model.getPlayer(j).getWinEval().equals("lost")) {
-							view.getPlayerPane(i).showWinEvaluation("win");
-							view.getPlayerPane(j).showWinEvaluation("loose");
-							System.out.println("2nd if");
-						} else {
-							if (model.getPlayer(i).getWinEval().equals("lost") && model.getPlayer(j).getWinEval().equals("won")) {
-								view.getPlayerPane(i).showWinEvaluation("loose");
-								view.getPlayerPane(j).showWinEvaluation("win");
-								System.out.println("3th if");
-							}
-						}
-					}
-
-				}
-			} */
     	} else {
             Alert alert = new Alert(AlertType.ERROR, "Not enough cards - shuffle first");
             alert.showAndWait();

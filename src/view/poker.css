@@ -9,6 +9,10 @@
     -fx-font-size: 12pt;
 }
 
+.numPlayer-view .text-field{
+    -fx-border-width: 0;
+}
+
 .label {
 	-fx-padding: 5.0px;
     -fx-min-width: 200.0;
@@ -23,7 +27,6 @@
     -fx-font-size: 12pt;
     -fx-opacity: 1.0;
     -fx-cell-size: 30px;
-
 }
 
 #menu-edit .label{
@@ -48,8 +51,8 @@
     -fx-border-width: 2.0px;
     -fx-background-image: url(/images/background_controls.jpg);
     -fx-background-size:cover;
-
 }
+
 /* no hover in menu*/
 #menu-edit:hover,
 #menu-edit:showing,
