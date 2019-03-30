@@ -7,14 +7,14 @@ import javafx.scene.layout.Region;
 import model.DeckOfCards;
 
 public class ControlArea extends HBox{
-    private DeckLabel lblDeck = new DeckLabel();
+    protected DeckLabel lblDeck = new DeckLabel();
     private Region spacer = new Region(); // Empty spacer
     Button btnShuffle = new Button("Shuffle");
     Button btnDeal = new Button("Deal");
 
     public ControlArea() {
     	super(); // Always call super-constructor first !!
-    	
+
     	this.getChildren().addAll(lblDeck, spacer, btnShuffle, btnDeal);
 
         HBox.setHgrow(spacer, Priority.ALWAYS); // Use region to absorb resizing

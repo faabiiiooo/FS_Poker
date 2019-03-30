@@ -5,11 +5,17 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import model.Card;
 
+
+
 public class CardLabel extends Label {
 	public CardLabel() {
 		super();
 		this.getStyleClass().add("card");
+
+
 	}
+
+
 
 	public void setCard(Card card) {
 		if (card != null) {
@@ -21,7 +27,13 @@ public class CardLabel extends Label {
 			imv.setPreserveRatio(true);
 			this.setGraphic(imv);
 		} else {
-			this.setGraphic(null);
+			//setting a beautiful cardBack when no card is displayed
+		    Image cardBack = new Image(this.getClass().getClassLoader().getResourceAsStream("images/card_background.png"));
+            ImageView imvCardBack = new ImageView(cardBack);
+            imvCardBack.fitWidthProperty().bind(this.widthProperty());
+            imvCardBack.fitHeightProperty().bind(this.heightProperty());
+            imvCardBack.setPreserveRatio(true);
+			this.setGraphic(imvCardBack);
 		}
 	}
 
@@ -30,5 +42,7 @@ public class CardLabel extends Label {
 		String suit = card.getSuit().toString();
 		return rank + "_of_" + suit + ".png";
 	}
+
+
 
 }

@@ -3,18 +3,17 @@ package view;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
 import model.Card;
 import model.HandType;
 import model.Player;
 
 public class PlayerPane extends VBox {
     private Label lblName = new Label();
-    private HBox hboxCards = new HBox();
+    protected HBox hboxCards = new HBox();
     private Label lblEvaluation = new Label("--");
 
-    protected Rectangle winnerRectangle = new Rectangle(35,35);
-    
+
+
     // Link to player object
     private Player player;
     
@@ -26,8 +25,9 @@ public class PlayerPane extends VBox {
         hboxCards.getStyleClass().add("hbox-cards");
 
 
+
         // Add child nodes
-        this.getChildren().addAll(lblName, hboxCards, lblEvaluation, winnerRectangle);
+        this.getChildren().addAll(lblName, hboxCards, lblEvaluation);
         
         // Add CardLabels for the cards
         for (int i = 0; i < 5; i++) {
@@ -65,5 +65,6 @@ public class PlayerPane extends VBox {
         return this.lblEvaluation;
     }
 
+    public HBox getHboxCards(){ return this.hboxCards; }
 
 }

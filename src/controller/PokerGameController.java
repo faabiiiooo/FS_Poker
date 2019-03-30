@@ -45,7 +45,8 @@ public class PokerGameController {
 			int numPlayers = Integer.parseInt(numOfPlayers);
 			PokerGame.setNumPlayers(numPlayers);
 		} catch (NumberFormatException ex){
-			System.out.println("invalid number");
+			Alert alert = new Alert(AlertType.ERROR, "Enter a valid Number!");
+			alert.showAndWait();
 		}
 		model = new PokerGameModel();  //generating new Model and view to start a new game with new amount of players
 		view = new PokerGameView(new Stage(), model);
@@ -66,7 +67,7 @@ public class PokerGameController {
 		Player winner = players.get(players.size()-1); //make the player with the highest hand defaultly to a winner
 		winners.add(winner);
 		players.remove(winner);  //remove player with highest hand from list.
-		for(Player p : new ArrayList<Player>(players)){
+		for(Player p : new ArrayList<>(players)){
 			if(p.compareTo(winner) == 0){  //check if there are other players in the list with the same hand
 				winners.add(p);  //if yes add them to the list of winners and remove them from regular players.
 				players.remove(p);
@@ -75,10 +76,6 @@ public class PokerGameController {
 			}
 		}
 
-		//System.out.println("winners.size: "+winners.size());
-		/*for(Player p: winners){
-			System.out.println(p.getHandType());
-		}*/
 		if(winners.size() == 1){ //if there is only one winner, everything is ok, set winEval to won
 			winners.get(0).setWinEval("won");
 		} else {
@@ -87,11 +84,6 @@ public class PokerGameController {
 				winner.setWinEval("won");
 			}
 
-			/*
-			for(Player p: winners){
-				System.out.println(p.getWinEval());
-			}*/
-			//HandType.handleTieBreak(winners);
 		}
 
 	}
@@ -104,6 +96,7 @@ public class PokerGameController {
     		Player p = model.getPlayer(i);
     		p.discardHand();
     		PlayerPane pp = view.getPlayerPane(i);
+    		PokerGameView.rotateCards(pp);
     		pp.updatePlayerDisplay();
     	}
 
@@ -137,4 +130,5 @@ public class PokerGameController {
             alert.showAndWait();
     	}
     }
+
 }

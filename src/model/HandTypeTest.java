@@ -166,6 +166,36 @@ public class HandTypeTest {
 	}
 
 	@Test
+	public void testHandleHighCardTieBreak(){
+		Player p1 = new Player("testPlayer1");
+		Player p2 = new Player("testPlayer2");
+
+		p1.addCard(makeCard("2H"));
+		p1.addCard(makeCard("AH"));
+		p1.addCard(makeCard("3H"));
+		p1.addCard(makeCard("JS"));
+		p1.addCard(makeCard("5S"));
+
+		p2.addCard(makeCard("5C"));
+		p2.addCard(makeCard("AC"));
+		p2.addCard(makeCard("KD"));
+		p2.addCard(makeCard("8S"));
+		p2.addCard(makeCard("6H"));
+
+		p1.evaluateHand();
+		p2.evaluateHand();
+		ArrayList<Player> players = new ArrayList<>();
+		players.add(p1);
+		players.add(p2);
+
+
+		Player winner = HandType.handleTieBreak(players);
+
+
+		assertEquals(p2,winner);
+	}
+
+	@Test
 	public void testHandleOnePairTieBreak(){
 
 		Player p1 = new Player("testPlayer1");
@@ -177,9 +207,9 @@ public class HandTypeTest {
 		p1.addCard(makeCard("JS"));
 		p1.addCard(makeCard("5S"));
 
-		p2.addCard(makeCard("9C"));
+		p2.addCard(makeCard("5C"));
 		p2.addCard(makeCard("AC"));
-		p2.addCard(makeCard("9D"));
+		p2.addCard(makeCard("5D"));
 		p2.addCard(makeCard("8S"));
 		p2.addCard(makeCard("6H"));
 
@@ -189,16 +219,15 @@ public class HandTypeTest {
 		players.add(p1);
 		players.add(p2);
 
-		System.out.println(p1.getHandType());
-		System.out.println(p2.getHandType());
+
 
 		Player winner = HandType.handleTieBreak(players);
 
-		System.out.println(players.size());
 
 
 
-		assertEquals(p2,winner);
+
+		assertEquals(p1,winner);
 
 
 	}
@@ -209,18 +238,7 @@ public class HandTypeTest {
 		Player p1 = new Player("testPlayer1");
 		Player p2 = new Player("testPlayer2");
 
-		int rank = 2;
 
-		/*
-		for(int i = 0; i < 2; i++){
-			p1.addCard(makeCard( rank+"H"));
-			p2.addCard(makeCard(rank+"D"));
-
-
-			rank++;
-
-		}
-		*/
 		p1.addCard(makeCard("KH"));
 		p1.addCard(makeCard("2D"));
 		p1.addCard(makeCard("5C"));
@@ -231,7 +249,7 @@ public class HandTypeTest {
 		p2.addCard(makeCard("7S"));
 		p2.addCard(makeCard("2H"));
 		p2.addCard(makeCard("KS"));
-		p2.addCard(makeCard("7C"));
+		p2.addCard(makeCard("2C"));
 
 		p1.evaluateHand();
 		p2.evaluateHand();
@@ -239,17 +257,6 @@ public class HandTypeTest {
 		players.add(p1);
 		players.add(p2);
 
-		System.out.println(p1.getCards());
-		System.out.println(p1.getHandType());
-		System.out.println(p2.getHandType());
-		System.out.println(players.size());
-
-		//HandType.handleTieBreak(players);
-
-
-		/*assertTrue(HandType.isTwoPair(p1.getCards()));
-		assertThat(p1.getWinEval(), CoreMatchers.containsString("won"));
-		assertThat(p2.getWinEval(), CoreMatchers.containsString("won"));*/
 
 		Player winner = HandType.handleTieBreak(players);
 
@@ -257,9 +264,9 @@ public class HandTypeTest {
 
 		assertEquals(p2,winner);
 
-		//System.out.println(winner.getPlayerName());
 
 	}
+
 	@Test
 	public void testHandleThreeOfAKindTieBreak(){
 		Player p1 = new Player("testPlayer1");
@@ -283,10 +290,6 @@ public class HandTypeTest {
 		players.add(p1);
 		players.add(p2);
 
-		System.out.println(p1.getCards());
-		System.out.println(p1.getHandType());
-		System.out.println(p2.getHandType());
-		System.out.println(players.size());
 
 		Player winner = HandType.handleTieBreak(players);
 
@@ -319,10 +322,6 @@ public class HandTypeTest {
 		players.add(p1);
 		players.add(p2);
 
-		System.out.println(p1.getCards());
-		System.out.println(p1.getHandType());
-		System.out.println(p2.getHandType());
-		System.out.println(players.size());
 
 		Player winner = HandType.handleTieBreak(players);
 
@@ -354,10 +353,6 @@ public class HandTypeTest {
 		players.add(p1);
 		players.add(p2);
 
-		System.out.println(p1.getCards());
-		System.out.println(p1.getHandType());
-		System.out.println(p2.getHandType());
-		System.out.println(players.size());
 
 		Player winner = HandType.handleTieBreak(players);
 
@@ -388,10 +383,7 @@ public class HandTypeTest {
 		players.add(p1);
 		players.add(p2);
 
-		System.out.println(p1.getCards());
-		System.out.println(p1.getHandType());
-		System.out.println(p2.getHandType());
-		System.out.println(players.size());
+
 
 		Player winner = HandType.handleTieBreak(players);
 
@@ -422,10 +414,7 @@ public class HandTypeTest {
 		players.add(p1);
 		players.add(p2);
 
-		System.out.println(p1.getCards());
-		System.out.println(p1.getHandType());
-		System.out.println(p2.getHandType());
-		System.out.println(players.size());
+
 
 		Player winner = HandType.handleTieBreak(players);
 
@@ -456,10 +445,7 @@ public class HandTypeTest {
 		players.add(p1);
 		players.add(p2);
 
-		System.out.println(p1.getCards());
-		System.out.println(p1.getHandType());
-		System.out.println(p2.getHandType());
-		System.out.println(players.size());
+
 
 		Player winner = HandType.handleTieBreak(players);
 
