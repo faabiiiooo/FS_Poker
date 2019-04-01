@@ -1,5 +1,6 @@
 package view;
 
+import app.PokerGame;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -22,7 +23,9 @@ public class ChangeNumPlayersView extends HBox {
 
 
         apply = new Button("Apply");
+        apply.setDisable(true);
         newNumOfPlayers = new TextField();
+        newNumOfPlayers.textProperty().addListener((observable, oldValue, newValue)->checkInput(newValue));
 
         this.getChildren().addAll(lblNumPlayers,newNumOfPlayers,apply);
 
@@ -37,6 +40,28 @@ public class ChangeNumPlayersView extends HBox {
         numPlayStage.setTitle("Change Number of Players");
         numPlayStage.show();
 
+
+    }
+
+    private void checkInput(String newValue){
+
+        if(newValue == null){
+            this.newNumOfPlayers.setStyle("-fx-text-inner-color:red;");
+            this.apply.setDisable(true);
+        } else {
+            try {
+                int newNumOfPlayers = Integer.parseInt(newValue);
+                if (newNumOfPlayers >= 2 && newNumOfPlayers <= PokerGame.MAX_PLAYERS) {
+                    this.newNumOfPlayers.setStyle("-fx-text-inner-color:green;");
+                    this.apply.setDisable(false);
+                } else {
+                    this.newNumOfPlayers.setStyle("-fx-text-inner-color:red;");
+                    this.apply.setDisable(true);
+                }
+            } catch (NumberFormatException e) {
+                this.newNumOfPlayers.setStyle("-fx-text-inner-color:red;");
+            }
+        }
 
     }
 

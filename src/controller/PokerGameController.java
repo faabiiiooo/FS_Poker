@@ -9,6 +9,7 @@ import model.*;
 import view.ChangeNumPlayersView;
 import view.PlayerPane;
 import view.PokerGameView;
+import view.Rules;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,6 +18,7 @@ public class PokerGameController {
 	private PokerGameModel model;
 	private PokerGameView view;
 	private ChangeNumPlayersView numPlayersView;
+	private Rules showRulesView;
 	
 	public PokerGameController(PokerGameModel model, PokerGameView view) {
 		this.model = model;
@@ -30,6 +32,11 @@ public class PokerGameController {
 		view.getShuffleButton().setOnAction( e -> shuffle() );
 		view.getDealButton().setOnAction( e -> deal() );
 		view.getNumPlayers().setOnAction(this::openNumPlayersWindow);
+		view.getShowRules().setOnAction(this::showRules);
+	}
+
+	private void showRules(Event e){
+		showRulesView = new Rules();
 	}
 
 	private void openNumPlayersWindow(Event e){  //open window to enter new amount of players

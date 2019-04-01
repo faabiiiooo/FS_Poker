@@ -6,8 +6,8 @@ import javafx.scene.control.MenuItem;
 
 public class MainMenu extends MenuBar {
 
-    protected Menu edit;
-    protected MenuItem numPlayers;
+    protected Menu edit, info;
+    protected MenuItem numPlayers, showRules;
 
     public MainMenu() {
         super();
@@ -16,10 +16,17 @@ public class MainMenu extends MenuBar {
         this.edit = new Menu("Edit");
         this.numPlayers = new MenuItem("Change Number of Players");
 
+        this.info = new Menu("Help");
+        this.showRules = new MenuItem("Show Hand Rankings");
+
         edit.setId("menu-edit");
+        info.setId("menu-edit");
+        //edit.getStyleClass().add("menu-edit");
+        //info.getStyleClass().add("menu-edit");
 
         edit.getItems().add(numPlayers);
-        this.getMenus().add(edit);
+        info.getItems().add(showRules);
+        this.getMenus().addAll(edit,info);
 
     }
 

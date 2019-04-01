@@ -132,5 +132,7 @@ public class PokerGameView {
 
 	public MenuItem getNumPlayers() { return menu.numPlayers; }
 
+	public MenuItem getShowRules() { return menu.showRules; }
+
 	public Stage getStage() { return stage; }
 }
