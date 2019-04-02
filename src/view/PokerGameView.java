@@ -71,7 +71,6 @@ public class PokerGameView {
 	}
 
 
-
 	private void winnerChanged(String newValue) {
 
 		if (newValue.contains("won")) {  //checking if newValue contains won
@@ -133,6 +132,8 @@ public class PokerGameView {
 	public MenuItem getNumPlayers() { return menu.numPlayers; }
 
 	public MenuItem getShowRules() { return menu.showRules; }
+
+	public MenuItem getShowDocumentation(){ return  menu.showDocumentation; }
 
 	public Stage getStage() { return stage; }
 }

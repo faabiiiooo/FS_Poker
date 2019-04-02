@@ -6,10 +6,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 import model.*;
-import view.ChangeNumPlayersView;
-import view.PlayerPane;
-import view.PokerGameView;
-import view.Rules;
+import view.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,6 +16,7 @@ public class PokerGameController {
 	private PokerGameView view;
 	private ChangeNumPlayersView numPlayersView;
 	private Rules showRulesView;
+	private Documentation documentationView;
 	
 	public PokerGameController(PokerGameModel model, PokerGameView view) {
 		this.model = model;
@@ -33,11 +31,14 @@ public class PokerGameController {
 		view.getDealButton().setOnAction( e -> deal() );
 		view.getNumPlayers().setOnAction(this::openNumPlayersWindow);
 		view.getShowRules().setOnAction(this::showRules);
+		view.getShowDocumentation().setOnAction(this::showDocumentation);
 	}
 
 	private void showRules(Event e){
 		showRulesView = new Rules();
 	}
+
+	private void showDocumentation(Event e){ documentationView = new Documentation(); }
 
 	private void openNumPlayersWindow(Event e){  //open window to enter new amount of players
 		numPlayersView = new ChangeNumPlayersView();

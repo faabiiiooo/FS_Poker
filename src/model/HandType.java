@@ -629,39 +629,7 @@ public enum HandType implements Comparable<HandType>{
                 fourOfAKindFound = true;
             }
         }
-/*
-        for(int i = 0; i < Player.HAND_SIZE-2; i++){
-            for(int j = i+1; j < Player.HAND_SIZE-1; j++){
-                if(clonedCards.get(i).getRank().compareTo(clonedCards.get(j).getRank()) == 0 && countIdenticalRanks != 4){
-                    countIdenticalRanks++;
-                }
-            }
-        }*/
 
-/*
-        if(clonedCards.get(clonedCards.size()-1).getRank() == clonedCards.get(clonedCards.size()-2).getRank()&&
-        clonedCards.get(clonedCards.size()-3).getRank() == clonedCards.get(clonedCards.size()-4).getRank()&&){
-            fourOfAKindFound = true;
-        } else {
-            if(clonedCards.get(clonedCards.size()-5).getRank() == clonedCards.get(clonedCards.size()-4).getRank()&&
-                    clonedCards.get(clonedCards.size()-3).getRank() == clonedCards.get(clonedCards.size()-2).getRank()){
-                fourOfAKindFound = true;
-            }
-        }
-*/
-
-        //same concept like in isThreeOfAKind
-       /* for(int i = 0; i < cards.size()-1;i++){
-            for(int j = i+1; j < cards.size(); j++){
-                if(cards.get(i).getRank() == cards.get(j).getRank() && countIdenticalRanks < 4){
-                    countIdenticalRanks++;
-                }
-            }
-        }
-        if(countIdenticalRanks == 4){
-            fourOfAKindFound = true;
-        }
-        */
 
         return fourOfAKindFound;
     }
