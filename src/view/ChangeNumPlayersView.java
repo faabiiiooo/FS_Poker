@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
@@ -38,6 +39,7 @@ public class ChangeNumPlayersView extends HBox {
                 getClass().getResource("poker.css").toExternalForm());
         numPlayStage.setScene(numPlayScene);
         numPlayStage.setTitle("Change Number of Players");
+        numPlayStage.getIcons().add(new Image("images/icon.jpg"));
         numPlayStage.show();
 
 

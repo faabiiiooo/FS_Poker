@@ -1,6 +1,7 @@
 package view;
 
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
@@ -27,6 +28,7 @@ public class Documentation {
         Stage documentationStage = new Stage();
         documentationStage.setScene(documentationScene);
         documentationStage.setTitle("Documentation");
+        documentationStage.getIcons().add(new Image("images/icon.jpg"));
         documentationStage.show();
 
 

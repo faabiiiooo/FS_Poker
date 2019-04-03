@@ -30,6 +30,7 @@ public class Rules extends VBox {
         Stage showRulesStage = new Stage();
         showRulesStage.setScene(showRulesScene);
         showRulesStage.setTitle("Hand Rankings");
+        showRulesStage.getIcons().add(new Image("images/icon.jpg"));
         showRulesStage.setResizable(false);
 
 

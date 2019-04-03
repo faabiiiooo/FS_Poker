@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.transform.Rotate;
@@ -57,7 +58,7 @@ public class PokerGameView {
 		root.setTop(menu);
 		
 		// Disallow resizing - which is difficult to get right with images
-		stage.setResizable(false);
+		stage.setResizable(true);
 
 
 
@@ -67,6 +68,8 @@ public class PokerGameView {
                 getClass().getResource("poker.css").toExternalForm());
         this.stage.setTitle("Poker Miniproject");
         this.stage.setScene(scene);
+        this.stage.sizeToScene();
+        this.stage.getIcons().add(new Image("images/icon.jpg"));
         this.start();
 	}
 
