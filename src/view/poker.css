@@ -88,7 +88,7 @@
     -fx-background-size: cover;
 }
 .player {
-	-fx-padding: 75;
+	-fx-padding: 50;
     -fx-border-color: green;
     -fx-border-width: 0.1px;
 }

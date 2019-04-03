@@ -33,7 +33,6 @@ public enum HandType implements Comparable<HandType>{
             case HighCard:
                 winner = handleHighCardTieBreak(winners);
                 break;
-
             case OnePair:
                 winner = handleOnePairTieBreak(winners);
                 break;

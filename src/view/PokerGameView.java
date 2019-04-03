@@ -31,6 +31,7 @@ public class PokerGameView {
 		this.model = model;
 		this.stage = stage;
 
+
 		// Create all of the player panes we need, and put them into an HBox
 		players = new TilePane(Orientation.HORIZONTAL);
 		for (int i = 0; i < PokerGame.numPlayers; i++) {
@@ -46,7 +47,7 @@ public class PokerGameView {
 
 		//Create main menu
 		menu = new MainMenu();
-		
+
 		// Create the control area
 		controls = new ControlArea();
 		controls.linkDeck(model.getDeck()); // link DeckLabel to DeckOfCards in the logic
@@ -56,6 +57,7 @@ public class PokerGameView {
 		root.setCenter(players);
 		root.setBottom(controls);
 		root.setTop(menu);
+
 		
 		// Disallow resizing - which is difficult to get right with images
 		stage.setResizable(true);
